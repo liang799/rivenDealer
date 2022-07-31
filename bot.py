@@ -1,10 +1,16 @@
 import discord
 
 
-class Dealer(discord.Client):
+class MyCog(discord.Cog):
+    @discord.slash_command(name="test")
+    async def test(self, ctx):
+        await ctx.respond("TEST")
+
+
+class Dealer(discord.Bot):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_cog(MyCog())
+
     async def on_ready(self):
         print(f'{self.user} has connected to Discord!')
-
-    async def on_message(self, message):
-        if message.content.startswith('99!'):
-            msg = await message.channel.send('testing123')
