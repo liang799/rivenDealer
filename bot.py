@@ -1,5 +1,7 @@
 import discord
 
+from views.dropdown import RivenSelector
+
 
 class MyCog(discord.Cog):
     @discord.slash_command(name="help", description="Display the help panel")
@@ -12,6 +14,10 @@ class MyCog(discord.Cog):
         embed.add_field(name='/status', value='Check placed bets')
         embed.add_field(name='/reveal', value='Reveal the Riven Mod')
         await ctx.respond(embed=embed)  # Send the embed with some text
+
+    @discord.slash_command(name="open", description="Open a Riven Mod")
+    async def open(self, ctx):
+        await ctx.send("Initiate a betting game!", view=RivenSelector(timeout=30))
 
 
 class Dealer(discord.Bot):
