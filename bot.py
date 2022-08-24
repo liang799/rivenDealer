@@ -2,7 +2,7 @@ import discord
 
 cogs_list = [
     'helpPanel',
-    'rivenCmd'
+    'gameInit'
 ]
 
 
