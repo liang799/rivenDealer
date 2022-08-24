@@ -14,7 +14,7 @@ supabase: Client = create_client(url, key)
 class GameInit(discord.Cog):
     @discord.slash_command(name="open", description="Open a Riven Mod")
     async def open(self, ctx):
-        await ctx.respond("Initiate a betting game!", view=RivenSelector(timeout=30))
+        await ctx.respond("Initiate a betting game!", view=RivenSelector(ctx.author))
 
     # @discord.slash_command(name="reveal", description="Supabase?")
     # async def open(self, ctx):
