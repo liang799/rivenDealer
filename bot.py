@@ -1,8 +1,8 @@
 import discord
 
 cogs_list = [
-    'helpPanel',
-    'gameInit'
+    'help',
+    'game'
 ]
 
 
