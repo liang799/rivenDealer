@@ -1,14 +1,7 @@
-import os
 import discord
 
 from views.dropdown import RivenSelector
-from dotenv import load_dotenv
-from supabase import create_client, Client
-
-load_dotenv()
-url: str = os.getenv("SUPABASE_URL")
-key: str = os.getenv("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+from database.supaHelper import Helper
 
 
 class Game(discord.Cog):
@@ -27,9 +20,8 @@ class Game(discord.Cog):
             await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)
         elif ctx.author == self.rivenPlayer:
             self.rivenPlayer = None
-            res = supabase.table("primary_weapons").select("*").eq('index', 0).execute()
-            data = res.data
-            await ctx.respond(data[0]['weapon'] + " " + data[0]['tier'])
+            weapon: str = Helper.getMeleeTier("kuva zarr")
+            await ctx.respond(weapon)
         else:
             await ctx.response.send_message("Unauthorized", ephemeral=True)
 

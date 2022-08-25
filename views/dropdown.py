@@ -14,4 +14,5 @@ class RivenSelector(discord.ui.View):
     )
     async def select_callback(self, select, interaction):
         select.disabled = True  # set the status of the select as disabled
-        await interaction.response.edit_message(content=f"{select.values[0]} selected!", view=self)
+        await interaction.response.send_message(
+            f"<@{interaction.user.id}> is currently opening a **{select.values[0]} Riven Mod**")
