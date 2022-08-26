@@ -18,4 +18,13 @@ class Helper:
         tier: str = data[0]['tier']
         return tier
 
+    @staticmethod
+    def signUp(name: str):
+        userName = Helper.supabase.table("user_bets").select("user").eq('user', name).execute()
+        print(userName)
+        if userName is not name:
+            data = Helper.supabase.table("user_bets").insert({"user": name}).execute()
+            assert len(data.data) > 0
+
+
 

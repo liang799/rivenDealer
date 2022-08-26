@@ -11,19 +11,24 @@ class Game(discord.Cog):
 
     @discord.slash_command(name="open", description="Open a Riven Mod")
     async def open(self, ctx):
-        self.rivenPlayer = ctx.author
+        self.rivenPlayer = str(ctx.author)
         await ctx.response.send_message("Initiate a betting game!", view=RivenSelector(), ephemeral=True)
 
     @discord.slash_command(name="reveal", description="Supabase?")
     async def reveal(self, ctx):
         if self.rivenPlayer is None:
             await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)
-        elif ctx.author == self.rivenPlayer:
+        elif str(ctx.author) == self.rivenPlayer:
             self.rivenPlayer = None
             weapon: str = Helper.getMeleeTier("kuva zarr")
             await ctx.respond(weapon)
         else:
             await ctx.response.send_message("Unauthorized", ephemeral=True)
+
+    @discord.slash_command(name="test", description="Supabase?")
+    async def test(self, ctx):
+        Helper.signUp(self.rivenPlayer)
+        await ctx.response.send_message(self.rivenPlayer)
 
 
 def setup(bot):  # this is called by Pycord to setup the cog
