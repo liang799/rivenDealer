@@ -13,18 +13,15 @@ class Game(discord.Cog):
     @discord.slash_command(name="open", description="Open a Riven Mod")
     async def open(self, ctx,
                    riven: Option(str, "Select Riven Mod Type", choices=["Melee", "Rifle", "Pistol"], required=True)):
-        if not self.ongoing:
-            self.ongoing = True
-            self.rivenPlayer = str(ctx.author)
-            if riven == "Melee":
-                self.tableName = "melee_weapons"
-            if riven == "Rifle":
-                self.tableName = "primary_weapons"
-            if riven == "Pistol":
-                self.tableName = "secondary_weapons"
-            await ctx.response.send_message(f"<@{ctx.author.id}> is currently opening a **{riven} Riven Mod**")
-        else:
-            await ctx.response.send_message("Please wait for the current round to end", ephemeral=True)
+        choice = -1
+        if riven == "Rifle":
+            choice = 1
+        if riven == "Pistol":
+            choice = 2
+        if riven == "Melee":
+            choice = 3
+        Helper.startUnveiling(ctx.author, choice)
+        await ctx.response.send_message(f"<@{ctx.author.id}> is currently opening a **{riven} Riven Mod**")
 
     @discord.slash_command(name="reveal", description="Supabase?")
     async def reveal(self, ctx):
