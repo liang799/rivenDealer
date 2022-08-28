@@ -9,12 +9,11 @@ class Helper:
     __url: str = os.getenv("SUPABASE_URL")
     __key: str = os.getenv("SUPABASE_KEY")
     supabase: Client = create_client(__url, __key)
-    wTables = ["melee_weapons", "primary_weapons", "secondary_weapons"]
 
     @staticmethod
-    def getMeleeTier(weapon: str):
+    def getTier(weapon: str):
         weaponCaps = weapon.upper()
-        res = Helper.supabase.table("primary_weapons").select("*").eq('weapon', weaponCaps).execute()
+        res = Helper.supabase.table("weapons").select("*").eq('weapon', weaponCaps).execute()
         data = res.data
         tier: str = data[0]['tier']
         return tier
@@ -50,6 +49,16 @@ class Helper:
             return f"You have already registered. You are a member since {date[0:7]}"
 
     @staticmethod
+    def checkRegistered(author):
+        response = Helper.supabase.table("users").select("*").eq('id', author.id).execute()
+        if not response.data:
+            return False
+        response = Helper.supabase.table("guilds").select("*").eq('id', author.guild.id).execute()
+        if not response.data:
+            return False
+        return True
+
+    @staticmethod
     def startUnveiling(author, choice):
         response = Helper.supabase.table("riven_rollers").insert({
             "riven_type": choice,
@@ -59,7 +68,10 @@ class Helper:
 
     @staticmethod
     def getOngoingStatus(author):
-        response = Helper.supabase.table("riven_rollers").select("*").eq('roller_id', author.id).execute()
+        response = Helper.supabase.table("riven_rollers").select("*").eq('guild_id', author.guild.id).execute()
+        if not any(d['revealed'] is None for d in response.data):
+            return False
+        return True
 
     @staticmethod
     def saveCurrentBets(author):
