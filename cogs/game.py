@@ -26,7 +26,7 @@ class Game(discord.Cog):
         else:
             await ctx.response.send_message("Please wait for the current round to end", ephemeral=True)
 
-    @discord.slash_command(name="eveal", description="Supabase?")
+    @discord.slash_command(name="reveal", description="Supabase?")
     async def reveal(self, ctx):
         if self.rivenPlayer == "":
             await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)

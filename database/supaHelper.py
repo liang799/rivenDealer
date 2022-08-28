@@ -19,15 +19,33 @@ class Helper:
         return tier
 
     @staticmethod
-    def signUp(name: str):
-        response = Helper.supabase.table("users").select("*").eq('username', name).execute()
-        result = response.data
-        if not any(d['username'] == name for d in result):
-            data = Helper.supabase.table("users").insert({"username": name}).execute()
+    def registerGuild(author):
+        guildName = str(author.guild)
+        guildID = author.guild.id
+        response = Helper.supabase.table("guilds").select("*").eq('id', guildID).execute()
+        if not response.data:
+            data = Helper.supabase.table("guilds").insert({
+                "id": guildID,
+                "guild_name": guildName
+            }).execute()
+            assert len(data.data) > 0
+        else:
+            print("Already inside")
+
+    @staticmethod
+    def signUp(author):
+        name = str(author)
+        response = Helper.supabase.table("users").select("*").eq('id', author.id).execute()
+        if not response.data:
+            data = Helper.supabase.table("users").insert({
+                "id": author.id,
+                "username": name,
+                "guild_id": author.guild.id
+            }).execute()
             assert len(data.data) > 0
             return f"Account creation successful! {name} will be stored in the database!"
         else:
-            date = result[0]['created_at']
+            date = response.data[0]['created_at']
             return f"You have already registered. You are a member since {date[0:7]}"
 
 
