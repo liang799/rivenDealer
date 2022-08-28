@@ -20,10 +20,10 @@ class Helper:
 
     @staticmethod
     def signUp(name: str):
-        userName = Helper.supabase.table("user_bets").select("user").eq('user', name).execute()
-        print(userName)
-        if userName is not name:
-            data = Helper.supabase.table("user_bets").insert({"user": name}).execute()
+        response = Helper.supabase.table("users").select("username").eq('username', name).execute()
+        result = response.data
+        if not any(d['username'] == name for d in result):
+            data = Helper.supabase.table("users").insert({"username": name}).execute()
             assert len(data.data) > 0
 
 
