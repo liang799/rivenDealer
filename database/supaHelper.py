@@ -20,11 +20,15 @@ class Helper:
 
     @staticmethod
     def signUp(name: str):
-        response = Helper.supabase.table("users").select("username").eq('username', name).execute()
+        response = Helper.supabase.table("users").select("*").eq('username', name).execute()
         result = response.data
         if not any(d['username'] == name for d in result):
             data = Helper.supabase.table("users").insert({"username": name}).execute()
             assert len(data.data) > 0
+            return f"Account creation successful! {name} will be stored in the database!"
+        else:
+            date = result[0]['created_at']
+            return f"You have already registered. You are a member since {date[0:7]}"
 
 
 

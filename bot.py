@@ -2,7 +2,8 @@ import discord
 
 cogs_list = [
     'help',
-    'game'
+    'game',
+    'account'
 ]
 
 
