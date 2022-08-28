@@ -1,6 +1,10 @@
 import os
+import time
+from datetime import datetime
+
 from dotenv import load_dotenv
 from supabase import create_client, Client
+from dateutil import parser
 
 load_dotenv()
 
@@ -46,7 +50,22 @@ class Helper:
             return f"Account creation successful! {name} will be stored in the database!"
         else:
             date = response.data[0]['created_at']
-            return f"You have already registered. You are a member since {date[0:7]}"
+            print(date)
+            # date_time = parser.parse(date)
+            # unixtime = time.mktime(date_time.timetuple())
+            # return f"You have already registered. You are a member since <t:{unixtime}:R>"
+
+            dObj = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%f%z")
+            unixtime = time.mktime(dObj.timetuple())
+            return f"You have already registered. You are a member since <t:{unixtime}>"
+
+            # return f"You have already registered. You are a member since {date[0:7]}"
+
+    @staticmethod
+    def getOngoingStatus(author):
+        response = Helper.supabase.table("riven_rollers").select("*").eq('roller_id', author.id).execute()
+
+
 
 
 
