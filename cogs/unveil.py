@@ -1,16 +1,16 @@
 import discord
 from discord import Option
-from database.supaHelper import Helper
+
+from utils.auth import AuthManager
+from utils.game import Game
+from utils.riven import Riven
 
 
 class Roller(discord.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
     @discord.slash_command(name="open", description="Open a Riven Mod")
     async def open(self, ctx,
                    riven: Option(str, "Select Riven Mod Type", choices=["Melee", "Rifle", "Pistol"], required=True)):
-        if not Helper.getOngoingStatus(ctx.author):
+        if not Game.getOngoingStatus(ctx.author):
             choice = -1
             if riven == "Rifle":
                 choice = 1
@@ -18,8 +18,8 @@ class Roller(discord.Cog):
                 choice = 2
             if riven == "Melee":
                 choice = 3
-            if Helper.checkRegistered(ctx.author):
-                Helper.startUnveiling(ctx.author, choice)
+            if AuthManager.checkRegistered(ctx.author):
+                Game.startUnveiling(ctx.author, choice)
                 await ctx.response.send_message(f"<@{ctx.author.id}> is currently opening a **{riven} Riven Mod**")
             else:
                 await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
@@ -28,9 +28,9 @@ class Roller(discord.Cog):
 
     @discord.slash_command(name="reveal", description="Supabase?")
     async def reveal(self, ctx):
-        if Helper.checkRegistered(ctx.author):
-            if Helper.getOngoingStatus(ctx.author):
-                weapon: str = Helper.getTier("kuva zarr")
+        if AuthManager.checkRegistered(ctx.author):
+            if Game.getOngoingStatus(ctx.author):
+                weapon: str = Riven.getTier("kuva zarr")
                 await ctx.respond(weapon)
             else:
                 await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)

@@ -1,12 +1,12 @@
 import discord
-from database.supaHelper import Helper
+from utils.auth import AuthManager
 
 
 class Account(discord.Cog):
     @discord.slash_command(name="register", description="Register using your discord username")
     async def register(self, ctx):
-        Helper.registerGuild(ctx.author)
-        await ctx.response.send_message(content=Helper.signUp(ctx.author), ephemeral=True)
+        AuthManager.registerGuild(ctx.author)
+        await ctx.response.send_message(content=AuthManager.signUp(ctx.author), ephemeral=True)
 
 
 def setup(bot):  # this is called by Pycord to setup the cog
