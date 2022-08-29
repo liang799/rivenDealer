@@ -19,7 +19,7 @@ class Roller(discord.Cog):
             if riven == "Melee":
                 choice = 3
             if AuthManager.checkRegistered(ctx.author):
-                Game.startUnveiling(ctx.author, choice)
+                Riven.startUnveiling(ctx.author, choice)
                 await ctx.response.send_message(f"<@{ctx.author.id}> is currently opening a **{riven} Riven Mod**")
             else:
                 await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
@@ -30,8 +30,8 @@ class Roller(discord.Cog):
     async def reveal(self, ctx):
         if AuthManager.checkRegistered(ctx.author):
             if Game.getOngoingStatus(ctx.author):
-                weapon: str = Riven.getTier("kuva zarr")
-                await ctx.respond(weapon)
+                test = Riven.getType("kuva zarr")
+                await ctx.respond(test)
             else:
                 await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)
         else:

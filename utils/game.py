@@ -9,10 +9,3 @@ class Game:
             return False
         return True
 
-    @staticmethod
-    def startUnveiling(author, choice):
-        response = SupaClient.supabase.table("riven_rollers").insert({
-            "riven_type": choice,
-            "user_id": author.id,
-            "guild_id": author.guild.id
-        }).execute()
