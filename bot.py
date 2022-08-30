@@ -3,7 +3,6 @@ import discord
 cogs_list = [
     'help',
     'unveil',
-    'play'
     'account'
 ]
 
