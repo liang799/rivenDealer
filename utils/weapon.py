@@ -51,3 +51,8 @@ class Weapon:
         if not res.data:
             return "Invalid weapon name"
         return res.data[0]['weapon_types']['type']
+
+    @staticmethod
+    def getWeaponsRow():
+        res = SupaClient.supabase.table("weapons").select("weapon").execute()
+        return res

@@ -1,9 +1,16 @@
 import discord
-from discord import Option
+from discord import Option, option
 
 from utils.auth import AuthManager
 from utils.game import Game
 from utils.riven import Riven
+from utils.weapon import Weapon
+
+
+async def weapon_searcher(ctx: discord.AutocompleteContext):
+    res = Weapon.getWeaponsRow()
+    weapons = [x['weapon'] for x in res.data]
+    return [weapon for weapon in weapons if weapon.startswith(ctx.value.upper())]
 
 
 class Roller(discord.Cog):
@@ -27,7 +34,8 @@ class Roller(discord.Cog):
             await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
 
     @discord.slash_command(name="reveal", description="Supabase?")
-    async def reveal(self, ctx, name: Option(str, "Name of weapon", required=True)):
+    @option("name", description="Name of weapon", autocomplete=weapon_searcher)
+    async def reveal(self, ctx: discord.ApplicationContext, name: str):
         if AuthManager.checkRegistered(ctx.author):
             if Game.getOngoingStatus(ctx.author):
                 await ctx.respond(Riven.reveal(ctx.author, name))
