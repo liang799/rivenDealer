@@ -22,5 +22,5 @@ class Riven:
                 .is_('revealed_weapon', "NULL").execute()
             if not res.data:
                 return "Weapon type does not match Riven type!"
-            return f"<@{author.id}> has opened a **{weapon.upper()} Riven Mod**"
+            return f"<@{author.id}> has opened a **{Weapon.getTier(weapon)} Tier Riven Mod**"
         return "Invalid weapon name"
