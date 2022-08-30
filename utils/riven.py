@@ -17,8 +17,10 @@ class Riven:
         registrationID = AuthManager.getRegistrationID(author)
         weaponID = Weapon.getWeaponID(weapon)
         if weaponID != -1:
-            SupaClient.supabase.table("rivens").update({"revealed_weapon": weaponID})\
+            res = SupaClient.supabase.table("rivens").update({"revealed_weapon": weaponID})\
                 .eq('registration_id', registrationID).eq('riven_type', Weapon.getTypeID(weapon))\
-                .is_('revealed_weapon', None).execute()
-            return "Success!"
+                .is_('revealed_weapon', "NULL").execute()
+            if not res.data:
+                return "Weapon type does not match Riven type!"
+            return f"<@{author.id}> has opened a **{weapon.upper()} Riven Mod**"
         return "Invalid weapon name"

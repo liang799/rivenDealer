@@ -27,10 +27,10 @@ class Roller(discord.Cog):
             await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
 
     @discord.slash_command(name="reveal", description="Supabase?")
-    async def reveal(self, ctx):
+    async def reveal(self, ctx, name: Option(str, "Name of weapon", required=True)):
         if AuthManager.checkRegistered(ctx.author):
             if Game.getOngoingStatus(ctx.author):
-                await ctx.respond(Riven.reveal(ctx.author, "jadf"))
+                await ctx.respond(Riven.reveal(ctx.author, name))
             else:
                 await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)
         else:
