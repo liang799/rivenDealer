@@ -53,6 +53,6 @@ class Weapon:
         return res.data[0]['weapon_types']['type']
 
     @staticmethod
-    def getWeaponsRow():
+    def getWeaponsCol():
         res = SupaClient.supabase.table("weapons").select("weapon").execute()
         return res
