@@ -23,7 +23,7 @@ class AuthManager:
     @staticmethod
     def signUp(author):
         response = SupaClient.supabase.table("registration").select("*")\
-            .eq('user_id', author.id).eq('guild_id', author.guild.id).execute()
+            .eq("user_id", author.id).eq("guild_id", author.guild.id).execute()
         if not response.data:
             res = SupaClient.supabase.table("registration").insert({
                 "user_id": author.id,
@@ -32,13 +32,13 @@ class AuthManager:
             assert len(res.data) > 0
             return f"Account creation successful!"
         else:
-            date = response.data[0]['created_at']
+            date = response.data[0]["created_at"]
             return f"You have already registered. You are a member since {date[0:7]}"
 
     @staticmethod
     def checkRegistered(author):
         response = SupaClient.supabase.table("registration").select("*") \
-            .eq('user_id', author.id).eq('guild_id', author.guild.id).execute()
+            .eq("user_id", author.id).eq("guild_id", author.guild.id).execute()
         if not response.data:
             return False
         return True
@@ -46,9 +46,9 @@ class AuthManager:
     @staticmethod
     def getRegistrationID(author):
         response = SupaClient.supabase.table("registration").select("id") \
-            .eq('user_id', author.id).eq('guild_id', author.guild.id).execute()
+            .eq("user_id", author.id).eq("guild_id", author.guild.id).execute()
         if not response.data:
             return -1
-        return response.data[0]['id']
+        return response.data[0]["id"]
 
 

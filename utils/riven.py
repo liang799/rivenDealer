@@ -18,9 +18,16 @@ class Riven:
         weaponID = Weapon.getWeaponID(weapon)
         if weaponID != -1:
             res = SupaClient.supabase.table("rivens").update({"revealed_weapon": weaponID})\
-                .eq('registration_id', registrationID).eq('riven_type', Weapon.getTypeID(weapon))\
-                .is_('revealed_weapon', "NULL").execute()
+                .eq("registration_id", registrationID).eq("riven_type", Weapon.getTypeID(weapon))\
+                .is_("revealed_weapon", "NULL").execute()
             if not res.data:
                 return "Weapon type does not match Riven type!"
             return f"<@{author.id}> has opened a **{Weapon.getTier(weapon)} Tier Riven Mod**"
         return "Invalid weapon name"
+
+    @staticmethod
+    def getRivenID(author):
+        rivens = SupaClient.supabase.table("rivens").select("*, registration(*)") \
+            .is_("revealed_weapon", "NULL").execute().data
+        result = next((i for i, item in enumerate(rivens) if item["registration"]["guild_id"] == author.guild.id), None)
+        return rivens[result]["id"]

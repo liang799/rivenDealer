@@ -9,7 +9,7 @@ from utils.weapon import Weapon
 
 async def weapon_searcher(ctx: discord.AutocompleteContext):
     res = Weapon.getWeaponsCol()
-    weapons = [x['weapon'] for x in res.data]
+    weapons = [x["weapon"] for x in res.data]
     return [weapon for weapon in weapons if weapon.startswith(ctx.value.upper())]
 
 
