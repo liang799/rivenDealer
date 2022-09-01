@@ -38,6 +38,7 @@ class Roller(discord.Cog):
     async def reveal(self, ctx: discord.ApplicationContext, name: str):
         if AuthManager.checkRegistered(ctx.author):
             if Game.getOngoingStatus(ctx.author):
+                # Game.getResults(ctx.author)
                 await ctx.respond(Riven.reveal(ctx.author, name))
             else:
                 await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)

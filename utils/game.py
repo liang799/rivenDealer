@@ -1,4 +1,5 @@
 from database.supabaseClient import SupaClient
+from utils.auth import AuthManager
 
 
 class Game:
@@ -12,3 +13,17 @@ class Game:
         if len(result) != 0:
             return True
         return False
+
+    @staticmethod
+    def getResults(author):
+        registrationID = AuthManager.getRegistrationID(author)
+        res = SupaClient.supabase.table("rivens").select("id")\
+            .eq("registration_id", registrationID).is_("revealed_weapon", "NULL").execute()
+        print(res.data)
+        rivenID = res.data[0]["id"]
+        res = SupaClient.supabase.table("speculations").select(
+            "registration: registration_id(user_id),"
+            "weapon_tiers: tier(name)"
+        ).eq("riven_id", rivenID).execute()
+        print(res.data)
+        return res.data
