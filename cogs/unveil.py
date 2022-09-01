@@ -40,12 +40,20 @@ class Roller(discord.Cog):
             if Game.getOngoingStatus(ctx.author):
                 embed = discord.Embed(title="List of Speculations", color=discord.Colour.blurple())
                 data = Game.getResults(ctx.author)
-                table = ""
-                for index in range(len(data)):
-                    table += f"<@{data[index]['registration']['user_id']}> " \
-                             f"― {data[index]['weapon_tiers']['name']}\n"
-                embed.add_field(name="Name ― Tier", value=table)
-                await ctx.respond(Riven.reveal(ctx.author, name), embed=embed)
+                if not data:
+                    embed = None
+                else:
+                    table = ""
+                    for index in range(len(data)):
+                        table += f"<@{data[index]['registration']['user_id']}> " \
+                                 f"― {data[index]['weapon_tiers']['name']}\n"
+                    embed.add_field(name="Name ― Tier", value=table)
+                errMsg = Riven.reveal(ctx.author, name)
+                if not errMsg:
+                    msg = f"<@{ctx.author.id}> has opened a **{Weapon.getTier(name)} Tier Riven Mod**"
+                    await ctx.response.send_message(msg, embed=embed)
+                else:
+                    await ctx.response.send_message(errMsg, ephemeral=True)
             else:
                 await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)
         else:
