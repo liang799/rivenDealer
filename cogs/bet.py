@@ -32,6 +32,18 @@ class Bet(discord.Cog):
         else:
             await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
 
+    @discord.slash_command(name="status", description="Check number of bets")
+    async def status(self, ctx):
+        if AuthManager.checkRegistered(ctx.author):
+            if Game.getOngoingStatus(ctx.author):
+                num = BetManager.getNumBets(ctx.author)
+                embed = discord.Embed(title="Current round", description=f"Number of bets: {num}")
+                await ctx.respond(embed=embed, ephemeral=True)  # Send the embed with some text
+            else:
+                await ctx.response.send_message("Please initialise the game with `/open`", ephemeral=True)
+        else:
+            await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
+
 
 def setup(bot):  # this is called by Pycord to setup the cog
     bot.add_cog(Bet(bot))  # add the cog to the bot

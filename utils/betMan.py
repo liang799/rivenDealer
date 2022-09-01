@@ -1,5 +1,6 @@
 from database.supabaseClient import SupaClient
 from utils.auth import AuthManager
+from utils.counter import Count
 from utils.riven import Riven
 
 
@@ -17,7 +18,7 @@ class BetManager:
                 "tier": tierID
             }).execute()
             assert len(response.data) > 0
-            return "You have successfully placed your bet!"
+            return "Successfully placed bet!"
         else:
             response = SupaClient.supabase.table("speculations").update({
                 "id": r.data[0]["id"],
@@ -26,4 +27,10 @@ class BetManager:
                 "tier": tierID
             }).execute()
             assert len(response.data) > 0
-            return "You have successfully updated your bet!"
+            return "Updated bet!"
+
+    @staticmethod
+    def getNumBets(author):
+        rivenID = Riven.getRivenID(author)
+        res = SupaClient.supabase.table("speculations").select("id").eq("riven_id", rivenID).execute()
+        return Count.countList(res.data)

@@ -9,7 +9,7 @@ class HelpPanel(discord.Cog):
         embed.add_field(name="/register", value="Register to start")
         embed.add_field(name="/open", value="Open a Riven Mod")
         embed.add_field(name="/bet", value="Place a bet")
-        embed.add_field(name="/forfeit", value="Forfeit placed bet")
+        embed.add_field(name="/status", value="Check number of bets")
         embed.add_field(name="/reveal", value="Reveal the Riven Mod")
         await ctx.respond(embed=embed)  # Send the embed with some text
 
