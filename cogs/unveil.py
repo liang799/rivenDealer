@@ -38,13 +38,13 @@ class Roller(discord.Cog):
     async def reveal(self, ctx: discord.ApplicationContext, name: str):
         if AuthManager.checkRegistered(ctx.author):
             if Game.getOngoingStatus(ctx.author):
-                embed = discord.Embed(title="Name ― Tier")
+                embed = discord.Embed(title="List of Speculations", color=discord.Colour.blurple())
                 data = Game.getResults(ctx.author)
+                table = ""
                 for index in range(len(data)):
-                    embed.add_field(
-                        name="\u200b",
-                        value=f"<@{data[index]['registration']['user_id']}> ― Tier {data[index]['weapon_tiers']['name']}",
-                    )
+                    table += f"<@{data[index]['registration']['user_id']}> " \
+                             f"― {data[index]['weapon_tiers']['name']}\n"
+                embed.add_field(name="Name ― Tier", value=table)
                 await ctx.respond(Riven.reveal(ctx.author, name), embed=embed)
             else:
                 await ctx.response.send_message("Please use `/open` to open a riven mod", ephemeral=True)
