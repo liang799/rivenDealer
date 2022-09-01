@@ -33,7 +33,7 @@ class Roller(discord.Cog):
         else:
             await ctx.response.send_message("Please use `/register` to register", ephemeral=True)
 
-    @discord.slash_command(name="reveal", description="Supabase?")
+    @discord.slash_command(name="reveal", description="Reveal unveiled riven")
     @option("name", description="Name of weapon", autocomplete=weapon_searcher)
     async def reveal(self, ctx: discord.ApplicationContext, name: str):
         if AuthManager.checkRegistered(ctx.author):
