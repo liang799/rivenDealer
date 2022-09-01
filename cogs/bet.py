@@ -25,8 +25,8 @@ class Bet(discord.Cog):
                     choice = 5
                 if tier == "Unknown":
                     choice = 6
-                BetManager.betTier(ctx.author, choice)
-                await ctx.response.send_message("You have successfully place your bet!", ephemeral=True)
+                message = BetManager.betTier(ctx.author, choice)
+                await ctx.response.send_message(message, ephemeral=True)
             else:
                 await ctx.response.send_message("Please initialise the game with `/open`", ephemeral=True)
         else:
