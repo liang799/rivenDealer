@@ -7,6 +7,8 @@ from utils.riven import Riven
 from utils.weapon import Weapon
 from utils.priceSearch import CollectSample
 
+collect = CollectSample()
+collect.setup_method()
 
 async def weapon_searcher(ctx: discord.AutocompleteContext):
     res = Weapon.getWeaponsCol()
@@ -51,11 +53,21 @@ class Roller(discord.Cog):
                     embed.add_field(name="Name ― Tier", value=table)
                 errMsg = Riven.reveal(ctx.author, name)
                 if not errMsg:
-                    collect = CollectSample()
-                    collect.setup_method()
-                    prices = collect.collectDataSample()
-                    msg = f"<@{ctx.author.id}> has opened a **{Weapon.getWeapon(name)}** Riven Mod **({Weapon.getTier(name)} Tier)**\n*(Estimated Prices: " + prices + ")*"  
-                    await ctx.response.send_message(msg, embed=embed)
+                    nameInput = Weapon.getWeapon(name)
+                    output = ""
+                    await ctx.defer()
+                    prices = collect.collectDataSample(nameInput.title())
+                    
+                    for price in prices:
+                        output += (price.text + " | ") 
+                    msg = f"<@{ctx.author.id}> has opened a/an\n\n"
+                    msg += f"**{Weapon.getWeapon(name)}** Riven Mod **({Weapon.getTier(name)} Tier)**\n"
+                    msg += "=================================================="
+                    msg += f"\n**Reference unroll/trash roll prices:**"
+                    msg += "` | " + output + "`\n"
+
+                    await ctx.followup.send(msg, embed=embed)
+                    #await ctx.response.send_message(msg, embed=embed)
                 else:
                     await ctx.response.send_message(errMsg, ephemeral=True)
             else:
