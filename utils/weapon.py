@@ -13,6 +13,16 @@ class Weapon:
         return res.data[0]["index"]
 
     @staticmethod
+    def getWeapon(weapon: str):
+        weaponCaps = weapon.upper()
+        res = SupaClient.supabase.table("weapons").select(
+            "weapon"
+        ).eq("weapon", weaponCaps).execute()
+        if not res.data:
+            return -1
+        return res.data[0]["weapon"]
+
+    @staticmethod
     def getTierID(weapon: str):
         weaponCaps = weapon.upper()
         res = SupaClient.supabase.table("weapons").select(  # Kind of like joining tables

@@ -5,6 +5,7 @@ from utils.auth import AuthManager
 from utils.game import Game
 from utils.riven import Riven
 from utils.weapon import Weapon
+from utils.priceSearch import CollectSample
 
 
 async def weapon_searcher(ctx: discord.AutocompleteContext):
@@ -50,7 +51,10 @@ class Roller(discord.Cog):
                     embed.add_field(name="Name ― Tier", value=table)
                 errMsg = Riven.reveal(ctx.author, name)
                 if not errMsg:
-                    msg = f"<@{ctx.author.id}> has opened a **{Weapon.getTier(name)} Tier Riven Mod**"
+                    collect = CollectSample()
+                    collect.setup_method()
+                    prices = collect.collectDataSample()
+                    msg = f"<@{ctx.author.id}> has opened a **{Weapon.getWeapon(name)}** Riven Mod **({Weapon.getTier(name)} Tier)**\n*(Estimated Prices: " + prices + ")*"  
                     await ctx.response.send_message(msg, embed=embed)
                 else:
                     await ctx.response.send_message(errMsg, ephemeral=True)
